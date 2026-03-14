@@ -14,6 +14,6 @@ void taskMock_Execution(void *pvParameters) {
 
     // vTaskDelay: Báo cho FreeRTOS biết Task này xin "ngủ" 5000 ticks (5 giây).
     // Trong lúc nó ngủ, CPU sẽ chạy đi làm việc khác (đọc RFID, quét Keypad...).
-    vTaskDelay(pdMS_TO_TICKS(5000)); 
+    vTaskDelay(pdMS_TO_TICKS(1000)); 
   }
 }

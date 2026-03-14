@@ -4,38 +4,93 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-// Địa chỉ I2C thường là 0x27, nếu không chạy bạn thử đổi thành 0x3F
+
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void taskLCD_Execution(void *pvParameters) {
-  Wire.begin(I2C_SDA, I2C_SCL);
-  lcd.init();
-  lcd.backlight();
+    Wire.begin(I2C_SDA, I2C_SCL);
+    lcd.init();
+    lcd.backlight();
 
-  int toggleView = 0;
-
-  while(1) {
-    lcd.clear();
     
-    // Cứ mỗi 2 giây, LCD sẽ luân phiên hiển thị Thông tin Sensor hoặc Lệnh Control
-    if (toggleView < 2) {
-      // Hiển thị thông báo điều khiển (từ Keypad/RFID)
-      lcd.setCursor(0, 0);
-      lcd.print(g_lcdLine1);
-      lcd.setCursor(0, 1);
-      lcd.print(g_lcdLine2);
-    } else {
-      // Hiển thị nhiệt độ, độ ẩm
-      lcd.setCursor(0, 0);
-      lcd.print("T:" + String(g_temp, 1) + "C H:" + String(g_humid, 1) + "%");
-      lcd.setCursor(0, 1);
-      lcd.print("PIR: ");
-      lcd.print(g_isMotion ? "Motion!" : "Clear  ");
+    uint32_t LastState = 99;  // Để tránh lcd bị reload quá nhiều
+    uint32_t sysLocal;
+
+    lcd.setCursor(2,0);
+    lcd.print("Smart Room");
+    lcd.setCursor(1,1);
+    lcd.print("Manifest Team");
+    vTaskDelay(pdMS_TO_TICKS(3000)); 
+
+    while(1) {
+        sysLocal = systemState; 
+
+        if (sysLocal != LastState) {
+            lcd.clear();
+            LastState = sysLocal;
+        }
+
+        
+        switch (sysLocal) {
+            case INITIAL:
+                lcd.setCursor(0,0);
+                lcd.print("T:");
+                lcd.print(g_temp, 1); 
+                lcd.print("C ");      
+
+                lcd.setCursor(9,0);
+                lcd.print("H:");
+                lcd.print(g_humid, 1);
+                lcd.print("% ");
+
+                lcd.setCursor(0,1);
+                lcd.print("PIR:");
+                
+                if(g_isMotion == true) {
+                    lcd.print("Have people "); 
+                } else {
+                    lcd.print("No people   "); 
+                }
+                break;
+
+            case LED_CONTROL:
+                lcd.setCursor(0,0);
+                lcd.print("LED CONTROL     ");
+                lcd.setCursor(0,1);
+                if (g_ledState == true) {
+                    lcd.print("ON              ");
+                } else {
+                    lcd.print("OFF             ");
+                }
+                break;
+
+            case FAN_CONTROL:
+                lcd.setCursor(0,0);
+                lcd.print("FAN CONTROL     ");
+                lcd.setCursor(0,1);
+                if (g_fanState == true) {
+                    lcd.print("ON              ");
+                } else {
+                    lcd.print("OFF             ");
+                }
+                break;
+
+            case DOOR_CONTROL:
+                lcd.setCursor(0,0);
+                lcd.print("DOOR CONTROL    ");
+                lcd.setCursor(0,1);
+                if (g_doorState == true) {
+                    lcd.print("OPEN            ");
+                } else {
+                    lcd.print("CLOSED          ");
+                }
+                break;
+                
+            default:
+                break;
+        }
+
+        
+        vTaskDelay(pdMS_TO_TICKS(200)); 
     }
-
-    toggleView++;
-    if(toggleView > 3) toggleView = 0;
-
-    vTaskDelay(pdMS_TO_TICKS(1000)); // Cập nhật màn hình mỗi 1 giây
-  }
 }

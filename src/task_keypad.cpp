@@ -24,25 +24,62 @@ void taskKeypad_Execution(void *pvParameters) {
     char key = keypad.getKey();
     if (key) {
       Serial.println("Key pressed: " + String(key));
+      switch (systemState){
+        case INITIAL:
+            if(key == '*'){
+                systemState = LED_CONTROL;
+            }
+            break;
+        case LED_CONTROL:
+            if(key == '*'){
+                systemState = FAN_CONTROL;
+            }
+            if (key == '1'){
+                g_ledState = !g_ledState;
+                Serial.print(g_ledState);
+            }
+            break;
+        case FAN_CONTROL:
+           if(key == '*'){
+                systemState = DOOR_CONTROL;
+            }
+            if(key == '1'){
+                g_fanState = !g_fanState;
+            }
+            break;
+        case DOOR_CONTROL:
+           if(key == '*'){
+                systemState = INITIAL;
+            }
+            if(key == '1'){
+                g_doorState = !g_doorState;
+            }
+            break;
+        default:
+            systemState = INITIAL;
+            break;
+      }
+
+
       
-      if (key == '1') {
-        g_ledState = !g_ledState;
-        digitalWrite(LED_PIN, g_ledState ? HIGH : LOW);
-        g_lcdLine1 = "Led Control";
-        g_lcdLine2 = g_ledState ? "ON" : "OFF";
-      } 
-      else if (key == '2') {
-        g_fanState = !g_fanState;
-        digitalWrite(FAN_PIN, g_fanState ? HIGH : LOW);
-        g_lcdLine1 = "Fan Control";
-        g_lcdLine2 = g_fanState ? "ON" : "OFF";
-      }
-      else if (key == '3') {
-        g_doorState = !g_doorState;
-        doorServo.write(g_doorState ? 90 : 0); // Quay 90 độ để mở cửa
-        g_lcdLine1 = "Door Control";
-        g_lcdLine2 = g_doorState ? "Open" : "Close";
-      }
+    //   if (key == '1') {
+    //     g_ledState = !g_ledState;
+    //     digitalWrite(LED_PIN, g_ledState ? HIGH : LOW);
+    //     g_lcdLine1 = "Led Control";
+    //     g_lcdLine2 = g_ledState ? "ON" : "OFF";
+    //   } 
+    //   else if (key == '2') {
+    //     g_fanState = !g_fanState;
+    //     digitalWrite(FAN_PIN, g_fanState ? HIGH : LOW);
+    //     g_lcdLine1 = "Fan Control";
+    //     g_lcdLine2 = g_fanState ? "ON" : "OFF";
+    //   }
+    //   else if (key == '3') {
+    //     g_doorState = !g_doorState;
+    //     doorServo.write(g_doorState ? 90 : 0); // Quay 90 độ để mở cửa
+    //     g_lcdLine1 = "Door Control";
+    //     g_lcdLine2 = g_doorState ? "Open" : "Close";
+    //   }
     }
     // Ngủ 50ms để chống dội phím (Debounce) và nhường CPU
     vTaskDelay(pdMS_TO_TICKS(50)); 

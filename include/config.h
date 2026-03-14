@@ -4,12 +4,12 @@
 // ==========================================
 // THÔNG TIN MẠNG & ADAFRUIT IO
 // ==========================================
-#define WIFI_SSID       "TEN_WIFI_CUA_BAN"
-#define WIFI_PASS       "MAT_KHAU_WIFI"
-#define AIO_USERNAME    "TEN_USER_ADAFRUIT"
-#define AIO_KEY         "KEY_ADAFRUIT_CUA_BAN"
-#define AIO_SERVER      "io.adafruit.com"
-#define AIO_SERVERPORT  1883
+#define WIFI_SSID       "TEN_WIFI_CUA_BAN"    // TEN WIFI
+#define WIFI_PASS       "MAT_KHAU_WIFI"       // MAT KHAU WIFI
+#define AIO_USERNAME    "TEN_USER_ADAFRUIT"   // TEN USER ADAFRUIT (KHÔNG PHẢI KEY)
+#define AIO_KEY         "KEY_ADAFRUIT_CUA_BAN"// KEY ADAFRUIT (DÙNG ĐỂ KẾT NỐI MQTT, KHÔNG PHẢI USERNAME)
+#define AIO_SERVER      "io.adafruit.com"     // MÁY CHỦ MQTT CỦA ADAFRUIT
+#define AIO_SERVERPORT  1883                  // CỔNG KẾT NỐI MQTT
 
 // ==========================================
 // ĐỊNH NGHĨA CHÂN (PINOUT) CHO YOLO UNO (ESP32-S3)
@@ -19,8 +19,8 @@
 #define I2C_SCL         12
 
 // 2. Servo, LED, Quạt
-#define SERVO_PIN       47 // D12 trên Yolo Uno
-#define LED_PIN         1  // Giả lập Đèn (Ví dụ chân D0/RX)
+#define SERVO_PIN       38 // D12 trên Yolo Uno
+#define LED_PIN         48  // Giả lập Đèn (Ví dụ chân D0/RX)
 #define FAN_PIN         2  // Giả lập Quạt (Ví dụ chân D1/TX)
 
 // 3. RFID RC522 (Sử dụng chuẩn SPI)

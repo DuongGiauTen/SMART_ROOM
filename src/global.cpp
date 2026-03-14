@@ -1,6 +1,9 @@
 #include "global.h"
-
+#include "config.h"
 // Đây là nơi cấp phát bộ nhớ thực sự cho các biến
+
+volatile uint32_t systemState = INITIAL;
+
 volatile float g_temp = 0.0;
 volatile float g_humid = 0.0;
 volatile bool g_isMotion = false;
