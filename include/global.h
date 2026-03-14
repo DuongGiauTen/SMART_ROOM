@@ -1,17 +1,26 @@
-#ifndef __GLOBAL__
-#define __GLOBAL__
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
 #include <Arduino.h>
+#include <ESP32Servo.h>
 
-#include "led_blinky.h"
-#include "display_task.h"
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+// Từ khóa "extern" báo cho trình biên dịch biết: 
+// "Biến này đã được tạo ở một nơi khác (global.cpp), hãy dùng chung nó nhé!"
+// Từ khóa "volatile" bắt buộc dùng trong FreeRTOS để tránh trình biên dịch tối ưu hóa sai lệnh.
 
-#define INITIAL 0
-#define LED_CONTROL 1
-#define FAN_CONTROL 2
+extern volatile float g_temp;
+extern volatile float g_humid;
+extern volatile bool g_isMotion;
 
-extern uint32_t systemState; // Biến toàn cục để lưu trạng thái hệ thống
+extern volatile bool g_ledState;
+extern volatile bool g_fanState;
+extern volatile bool g_doorState;
 
-#endif // __GLOBAL__
+// Dữ liệu hiển thị lên LCD
+extern String g_lcdLine1;
+extern String g_lcdLine2;
+
+// Đối tượng Servo dùng chung cho cả Task Keypad và Task RFID
+extern Servo doorServo;
+
+#endif
