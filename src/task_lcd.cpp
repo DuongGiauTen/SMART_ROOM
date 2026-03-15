@@ -6,12 +6,14 @@
 
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd2(0x21, 16, 2);
 
 void taskLCD_Execution(void *pvParameters) {
     Wire.begin(I2C_SDA, I2C_SCL);
     lcd.init();
     lcd.backlight();
-
+    lcd2.init();
+    lcd2.backlight();
     
     uint32_t LastState = 99;  // Để tránh lcd bị reload quá nhiều
     uint32_t sysLocal;
@@ -33,6 +35,11 @@ void taskLCD_Execution(void *pvParameters) {
         
         switch (sysLocal) {
             case INITIAL:
+                lcd2.setCursor(0,0);
+                lcd2.print("Initializing...");
+                lcd2.setCursor(0,1);
+                lcd2.print("DUONG DEP TRAI");
+
                 lcd.setCursor(0,0);
                 lcd.print("T:");
                 lcd.print(g_temp, 1); 

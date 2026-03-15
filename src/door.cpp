@@ -6,7 +6,7 @@ void door_task(void *pvParameters) {
     while(1) {
         if (g_doorState) {
             // Mở cửa
-            doorServo.write(90); 
+            doorServo.write(130); 
         } else {
             // Đóng cửa
             doorServo.write(0); 
