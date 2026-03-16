@@ -1,13 +1,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "secret.h" // Chứa các thông tin nhạy cảm như key Adafruit IO
 // ==========================================
 // THÔNG TIN MẠNG & ADAFRUIT IO
 // ==========================================
-#define WIFI_SSID       "TEN_WIFI_CUA_BAN"    // TEN WIFI
-#define WIFI_PASS       "MAT_KHAU_WIFI"       // MAT KHAU WIFI
-#define AIO_USERNAME    "TEN_USER_ADAFRUIT"   // TEN USER ADAFRUIT (KHÔNG PHẢI KEY)
-#define AIO_KEY         "KEY_ADAFRUIT_CUA_BAN"// KEY ADAFRUIT (DÙNG ĐỂ KẾT NỐI MQTT, KHÔNG PHẢI USERNAME)
+#define WIFI_SSID       "BKIT_ROOFTOP"    // TEN WIFI
+#define WIFI_PASS       SECRET_WIFI_PASS       // MAT KHAU WIFI
+#define AIO_USERNAME    "duongtran253"   // TEN USER ADAFRUIT (KHÔNG PHẢI KEY)
+#define AIO_KEY         SECRET_ADAFRUIT_IO_KEY// KEY ADAFRUIT (DÙNG ĐỂ KẾT NỐI MQTT, KHÔNG PHẢI USERNAME)
 #define AIO_SERVER      "io.adafruit.com"     // MÁY CHỦ MQTT CỦA ADAFRUIT
 #define AIO_SERVERPORT  1883                  // CỔNG KẾT NỐI MQTT
 
@@ -34,6 +35,10 @@
 // 4. Keypad 4x4
 #define ROW_NUM         4 
 #define COLUMN_NUM      4
+
+// 5. Set ngưỡng nhiệt độ
+#define TEMP_THRESHOLD  30.0 // Ngưỡng nhiệt độ để bật quạt
+#define HUMID_THRESHOLD 60.0 // Ngưỡng độ ẩm để cảnh báo
 
 
 #endif
