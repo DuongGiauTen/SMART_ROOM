@@ -12,5 +12,6 @@ void light_task(void *pvParameters) {
             // Tắt đèn
             digitalWrite(LED_PIN, LOW);
         }
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }

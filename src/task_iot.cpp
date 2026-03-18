@@ -103,7 +103,7 @@ void taskIoT_Execution(void *pvParameters) {
         // -------------------------------------------------------------
         // Hàm millis() đếm số mili-giây từ lúc mạch khởi động.
         // Logic này đảm bảo cứ ĐÚNG 10 giây ta mới Publish một lần.
-        if (millis() - lastPublishTime >= 10000) {
+        if (millis() - lastPublishTime >= 15000) {
             if (mqtt.connected()) {
                 // Gửi nhiệt độ, độ ẩm, PIR
                 tempFeed.publish(g_temp);
