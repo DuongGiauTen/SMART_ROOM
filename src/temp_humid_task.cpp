@@ -27,6 +27,6 @@ void temp_humid_task(void *pvParameters) {
 
         // vTaskDelay: Báo cho FreeRTOS biết Task này xin "ngủ" 1000 ticks (1 giây).
         // Trong lúc nó ngủ, CPU sẽ chạy đi làm việc khác (đọc RFID, quét Keypad...).
-        vTaskDelay(pdMS_TO_TICKS(1000)); 
+        vTaskDelay(pdMS_TO_TICKS(5000)); 
     }
 }

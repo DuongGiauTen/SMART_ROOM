@@ -26,6 +26,19 @@ Adafruit_MQTT_Subscribe doorSub  = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "
 // Biến lưu thời gian để đếm đủ 10 giây
 uint32_t lastPublishTime = 0;
 
+// Biến lưu trạng thái trước đó để chỉ publish khi thay đổi
+bool prevLedState = false;
+bool prevFanState = false;
+bool prevDoorState = false;
+bool prevMotionState = false;
+
+// Biến lưu thời gian publish cuối cho temp/humid (mỗi 5 phút)
+uint32_t lastTempHumidPublishTime = 0;
+
+// Biến lưu giá trị trước đó cho temp/humid để kiểm tra thay đổi
+float prevTemp = 0.0;
+float prevHumid = 0.0;
+
 void MQTT_Connect() {
     int8_t ret;
     if (mqtt.connected()) return;
@@ -99,25 +112,56 @@ void taskIoT_Execution(void *pvParameters) {
         }
 
         // -------------------------------------------------------------
-        // PHẦN B: GỬI DỮ LIỆU CẢM BIẾN (ĐỊNH KỲ 10 GIÂY)
+        // PHẦN B: GỬI DỮ LIỆU THEO LOGIC TỐI ƯU
         // -------------------------------------------------------------
-        // Hàm millis() đếm số mili-giây từ lúc mạch khởi động.
-        // Logic này đảm bảo cứ ĐÚNG 10 giây ta mới Publish một lần.
-        if (millis() - lastPublishTime >= 15000) {
+        // Publish trạng thái chỉ khi thay đổi
+        if (g_ledState != prevLedState) {
             if (mqtt.connected()) {
-                // Gửi nhiệt độ, độ ẩm, PIR
-                tempFeed.publish(g_temp);
-                humidFeed.publish(g_humid);
-                motionFeed.publish(g_isMotion ? 1 : 0);
-                
-                // Đồng bộ lại trạng thái LED, FAN, DOOR (Phòng trường hợp bạn dùng Keypad bấm)
                 ledPub.publish(g_ledState ? 1 : 0);
-                fanPub.publish(g_fanState ? 1 : 0);
-                doorPub.publish(g_doorState ? 1 : 0);
-                
-                Serial.println("[IoT] Data Batch Published to Adafruit IO!");
+                Serial.println("[IoT] LED state published");
             }
-            lastPublishTime = millis(); // Reset lại đồng hồ bấm giờ
+            prevLedState = g_ledState;
+        }
+
+        if (g_fanState != prevFanState) {
+            if (mqtt.connected()) {
+                fanPub.publish(g_fanState ? 1 : 0);
+                Serial.println("[IoT] FAN state published");
+            }
+            prevFanState = g_fanState;
+        }
+
+        if (g_doorState != prevDoorState) {
+            if (mqtt.connected()) {
+                doorPub.publish(g_doorState ? 1 : 0);
+                Serial.println("[IoT] DOOR state published");
+            }
+            prevDoorState = g_doorState;
+        }
+
+        if (g_isMotion != prevMotionState) {
+            if (mqtt.connected()) {
+                motionFeed.publish(g_isMotion ? 1 : 0);
+                Serial.println("[IoT] Motion state published");
+            }
+            prevMotionState = g_isMotion;
+        }
+
+        // Publish temp/humid mỗi 5 phút hoặc khi thay đổi đáng kể (>1°C hoặc >5%)
+        bool shouldPublishTempHumid = false;
+        if (millis() - lastTempHumidPublishTime >= 300000) {  // 5 phút = 300000 ms
+            shouldPublishTempHumid = true;
+        } else if (abs(g_temp - prevTemp) >= 1.0 || abs(g_humid - prevHumid) >= 5.0) {
+            shouldPublishTempHumid = true;
+        }
+
+        if (shouldPublishTempHumid && mqtt.connected()) {
+            tempFeed.publish(g_temp);
+            humidFeed.publish(g_humid);
+            Serial.println("[IoT] Temp/Humid published");
+            lastTempHumidPublishTime = millis();
+            prevTemp = g_temp;
+            prevHumid = g_humid;
         }
 
         // Giữ kết nối (Heartbeat)
