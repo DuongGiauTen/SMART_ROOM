@@ -23,6 +23,7 @@
 #define SERVO_PIN       38 // D12 trên Yolo Uno
 #define LED_PIN         48  // Giả lập Đèn (Ví dụ chân D0/RX)
 #define FAN_PIN         2  // Giả lập Quạt (Ví dụ chân D1/TX)
+#define PIR_PIN         1  // Giả lập Cảm biến chuyển động PIR (Ví dụ chân D2)
 
 // 3. RFID RC522 (Sử dụng chuẩn SPI)
 // ESP32-S3 cho phép map chân SPI tùy ý. Ở đây ta chọn các chân an toàn.
