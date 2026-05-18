@@ -4,8 +4,8 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x21, 16, 2);
-LiquidCrystal_I2C lcd2(0x27, 16, 2);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd2(0x21, 16, 2);
 
 void taskLCD_Execution(void *pvParameters) {
     Wire.begin(I2C_SDA, I2C_SCL);

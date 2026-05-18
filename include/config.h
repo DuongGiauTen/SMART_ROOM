@@ -5,7 +5,7 @@
 // ==========================================
 // THÔNG TIN MẠNG & ADAFRUIT IO
 // ==========================================
-#define WIFI_SSID       "BKIT_ROOFTOP"    // TEN WIFI
+#define WIFI_SSID       "ndh"    // TEN WIFI
 #define WIFI_PASS       SECRET_WIFI_PASS       // MAT KHAU WIFI
 #define AIO_USERNAME    "duongtran253"   // TEN USER ADAFRUIT (KHÔNG PHẢI KEY)
 #define AIO_KEY         SECRET_ADAFRUIT_IO_KEY// KEY ADAFRUIT (DÙNG ĐỂ KẾT NỐI MQTT, KHÔNG PHẢI USERNAME)

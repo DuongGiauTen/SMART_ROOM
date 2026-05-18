@@ -47,9 +47,7 @@ void MQTT_Connect() {
     uint8_t retries = 3;
     
     // BẮT BUỘC: Phải đăng ký lắng nghe (Subscribe) TRƯỚC KHI gọi connect()
-    mqtt.subscribe(&ledSub);
-    mqtt.subscribe(&fanSub);
-    mqtt.subscribe(&doorSub);
+    
 
     while ((ret = mqtt.connect()) != 0) { 
         Serial.println(mqtt.connectErrorString(ret));
@@ -70,6 +68,10 @@ void taskIoT_Execution(void *pvParameters) {
         Serial.print(".");
     }
     Serial.println("\nWiFi Connected.");
+
+    mqtt.subscribe(&ledSub);
+    mqtt.subscribe(&fanSub);
+    mqtt.subscribe(&doorSub);
 
     while(1) {
         MQTT_Connect();
@@ -164,9 +166,13 @@ void taskIoT_Execution(void *pvParameters) {
             prevHumid = g_humid;
         }
 
-        // Giữ kết nối (Heartbeat)
-        if(!mqtt.ping()) {
-            mqtt.disconnect();
+        static uint32_t lastPingTime = 0;
+        if (millis() - lastPingTime > 60000) { 
+            if(!mqtt.ping()) {
+                Serial.println("[IoT] Ping failed, disconnecting...");
+                mqtt.disconnect();
+            }
+            lastPingTime = millis();
         }
 
         // Nhường CPU cho task khác một nhịp siêu ngắn để chống treo máy
