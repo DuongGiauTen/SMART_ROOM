@@ -23,6 +23,6 @@ void taskPIR_Execution(void *pvParameters) {
         }
 
         // Nhường CPU 200ms (Cảm biến PIR không cần đọc quá nhanh)
-        vTaskDelay(pdMS_TO_TICKS(5000)); 
+        vTaskDelay(pdMS_TO_TICKS(200)); 
     }
 }

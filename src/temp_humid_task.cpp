@@ -18,12 +18,12 @@ void temp_humid_task(void *pvParameters) {
         Serial.print(" °C, Humidity: "); Serial.print(g_humid,2);
         Serial.println(" %");
 
-        if (g_temp >= TEMP_THRESHOLD) {
-            Serial.println("Temperature threshold exceeded! Turning on fan...");
-            g_fanState = true; 
-        } else {
-            g_fanState = false; 
-        }
+        // if (g_temp >= TEMP_THRESHOLD) {
+        //     Serial.println("Temperature threshold exceeded! Turning on fan...");
+        //     g_fanState = true; 
+        // } else {
+        //     g_fanState = false; 
+        // }
 
         // vTaskDelay: Báo cho FreeRTOS biết Task này xin "ngủ" 1000 ticks (1 giây).
         // Trong lúc nó ngủ, CPU sẽ chạy đi làm việc khác (đọc RFID, quét Keypad...).

@@ -5,7 +5,7 @@
 // ==========================================
 // THÔNG TIN MẠNG & ADAFRUIT IO
 // ==========================================
-#define WIFI_SSID       "ndh"    // TEN WIFI
+#define WIFI_SSID       "nice"    // TEN WIFI
 #define WIFI_PASS       SECRET_WIFI_PASS       // MAT KHAU WIFI
 #define AIO_USERNAME    "duongtran253"   // TEN USER ADAFRUIT (KHÔNG PHẢI KEY)
 #define AIO_KEY         SECRET_ADAFRUIT_IO_KEY// KEY ADAFRUIT (DÙNG ĐỂ KẾT NỐI MQTT, KHÔNG PHẢI USERNAME)
@@ -23,7 +23,7 @@
 #define SERVO_PIN       38 // D12 trên Yolo Uno
 #define LED_PIN         48  // Giả lập Đèn (Ví dụ chân D0/RX)
 #define FAN_PIN         2  // Giả lập Quạt (Ví dụ chân D1/TX)
-#define PIR_PIN         1  // Giả lập Cảm biến chuyển động PIR (Ví dụ chân D2)
+#define PIR_PIN         3  // Giả lập Cảm biến chuyển động PIR (Ví dụ chân D2)
 
 // 3. RFID RC522 (Sử dụng chuẩn SPI)
 // ESP32-S3 cho phép map chân SPI tùy ý. Ở đây ta chọn các chân an toàn.
