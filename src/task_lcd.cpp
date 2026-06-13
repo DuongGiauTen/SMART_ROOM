@@ -4,7 +4,6 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 LiquidCrystal_I2C lcd2(0x21, 16, 2);
 
@@ -15,9 +14,16 @@ void taskLCD_Execution(void *pvParameters) {
     lcd2.init();
     lcd2.backlight();
     
-    uint32_t LastState = 99;  // Để tránh lcd bị reload quá nhiều
+    uint32_t LastState = 99;  
     uint32_t sysLocal;
 
+    // --- CÁC BIẾN MỚI THÊM VÀO ĐỂ GIÁM SÁT TƯƠNG TÁC ---
+    bool lastLed = g_ledState;
+    bool lastFan = g_fanState;
+    bool lastDoor = g_doorState;
+    uint32_t lastInteractionTime = millis(); // Đồng hồ bấm giờ
+
+    // Màn hình khởi động
     lcd.setCursor(2,0);
     lcd.print("Smart Room");
     lcd.setCursor(1,1);
@@ -27,9 +33,22 @@ void taskLCD_Execution(void *pvParameters) {
     while(1) {
         sysLocal = systemState; 
 
-        if (sysLocal != LastState) {
-            lcd.clear();
-            LastState = sysLocal;
+   
+        if (sysLocal != LastState || lastLed != g_ledState || lastFan != g_fanState || lastDoor != g_doorState) {
+            if (sysLocal != LastState) {
+                lcd.clear();
+                LastState = sysLocal;
+            }
+            
+            lastLed = g_ledState;
+            lastFan = g_fanState;
+            lastDoor = g_doorState;
+            lastInteractionTime = millis(); 
+        }
+
+        
+        if (sysLocal != INITIAL && (millis() - lastInteractionTime >= 5000)) {
+            systemState = INITIAL; // Ép biến toàn cục về màn hình chính
         }
 
         
@@ -97,7 +116,6 @@ void taskLCD_Execution(void *pvParameters) {
                 break;
         }
 
-        
-        vTaskDelay(pdMS_TO_TICKS(200)); 
+        vTaskDelay(pdMS_TO_TICKS(100)); 
     }
 }

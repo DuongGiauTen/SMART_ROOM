@@ -4,11 +4,13 @@
 #include "task_mock.h"
 #include "task_lcd.h"
 #include "task_keypad.h"
-#include "task_rfid.h"
+//#include "task_rfid.h"
 #include "task_iot.h"
-#include "light.h"
-#include "door.h"
+//#include "light.h"
+//#include "door.h"
 #include "temp_humid_task.h"
+#include "task_pir.h"
+#include "device.h"
 
 void setup() {
   Serial.begin(115200);
@@ -28,10 +30,12 @@ void setup() {
   xTaskCreate(taskLCD_Execution,    "LCDTask",    4096, NULL, 2, NULL); 
   xTaskCreate(taskKeypad_Execution, "KeypadTask", 2048, NULL, 2, NULL); // Ưu tiên trung bình
   //xTaskCreate(taskRFID_Execution,   "RFIDTask",   4096, NULL, 4, NULL); // Ưu tiên cao (để không miss thẻ)
-  xTaskCreate(taskIoT_Execution,    "IoTTask",    8192, NULL, 2, NULL); // Cần RAM rất lớn cho WiFi
-  xTaskCreate(light_task,           "LightTask",  2048, NULL, 2, NULL); // Ưu tiên trung bình
-  xTaskCreate(door_task,            "DoorTask",   2048, NULL, 3, NULL); // Ưu tiên cao (để phản hồi nhanh)
+  xTaskCreate(taskIoT_Execution,    "IoTTask",    8192, NULL, 5, NULL); // Cần RAM rất lớn cho WiFi
+  //xTaskCreate(light_task,           "LightTask",  2048, NULL, 2, NULL); // Ưu tiên trung bình
+  //xTaskCreate(door_task,            "DoorTask",   2048, NULL, 3, NULL); // Ưu tiên cao (để phản hồi nhanh)
   xTaskCreate(temp_humid_task,      "TempHumidTask", 4096, NULL, 2, NULL); // Cần RAM cho DHT20
+  xTaskCreate(taskPIR_Execution,    "PIRTask",    2048, NULL, 3, NULL); // Ưu tiên cao (để phản hồi nhanh)
+  xTaskCreate(device_task,          "DeviceTask", 2048, NULL, 4, NULL); // Ưu tiên cao nhất (điều khiển phần cứng)
 }
 
 void loop() {

@@ -10,10 +10,10 @@ void taskMock_Execution(void *pvParameters) {
     g_humid = random(600, 900) / 10.0;
     
     // Đảo trạng thái PIR (Giả lập có người ra vào)
-    g_isMotion = !g_isMotion;
+    g_isMotion = true;
 
     // vTaskDelay: Báo cho FreeRTOS biết Task này xin "ngủ" 5000 ticks (5 giây).
     // Trong lúc nó ngủ, CPU sẽ chạy đi làm việc khác (đọc RFID, quét Keypad...).
-    vTaskDelay(pdMS_TO_TICKS(1000)); 
+    vTaskDelay(pdMS_TO_TICKS(15000)); 
   }
 }
